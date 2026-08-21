@@ -10,6 +10,28 @@ let payload: Payload
 
 beforeAll(async () => {
   payload = await getPayload({ config })
+  // `dev.db` is a persistent file and `key` is unique, so clear any rows left
+  // behind by a previous run — otherwise the create test below collides.
+  await payload.delete({
+    collection: 'email-templates',
+    where: { id: { exists: true } },
+  })
+
+  // `guest-confirmation` needs a saved doc with a tokenised subject: its
+  // config `defaultSubject` has no tokens, so the sendTemplate test can only
+  // assert on substitution against a real document. This was previously
+  // relying on whatever rows happened to survive in dev.db.
+  await payload.create({
+    collection: 'email-templates',
+    data: {
+      key: 'guest-confirmation',
+      subject: 'Thank you {{guest_name}}',
+      design: {
+        html: '<body><p>Thank you {{guest_name}} for your {{amount}} gift towards {{couple_names}}.</p></body>',
+        text: 'Thank you {{guest_name}} for your {{amount}} gift towards {{couple_names}}.',
+      },
+    },
+  })
 })
 
 afterAll(async () => {

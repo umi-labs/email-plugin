@@ -111,5 +111,13 @@
       "unrs-resolver"
     ]
   },
-  "registry": "https://registry.npmjs.org/"
+  "registry": "https://registry.npmjs.org/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umi-labs/email-plugin"
+  },
+  "homepage": "https://github.com/umi-labs/email-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/umi-labs/email-plugin/issues"
+  }
 }
